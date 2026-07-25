@@ -558,6 +558,37 @@ describe('V2 schema validation edge cases', () => {
     }
   });
 
+  it('should validate algorand mainnet network (CAIP-2 genesis hash)', () => {
+    const response = {
+      x402Version: 2,
+      accepts: [
+        {
+          scheme: 'exact' as const,
+          network: 'algorand:wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8=',
+          amount: '5000',
+          payTo: 'HFHI5MF4C55AYUSQ2JD2AFYMUHWBNSE3SGU6N2YZ5ET5FUZD5YHZHXSWXU',
+          maxTimeoutSeconds: 60,
+          asset: '31566704',
+          extra: {},
+        },
+      ],
+      resource: {
+        url: 'https://api-algo.stelardigital.com/telemetry',
+        description: 'Algorand mainnet endpoint',
+        mimeType: 'application/json',
+      },
+    };
+
+    const result = parseV2(response);
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.accepts?.[0]?.network).toBe(
+        'algorand:wGHE2Pwdvd7S12BL5FaOP20EGYesN73ktiC1qzkkit8='
+      );
+    }
+  });
+
   it('should validate solana-devnet network', () => {
     const response = {
       x402Version: 2,
